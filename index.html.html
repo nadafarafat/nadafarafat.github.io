@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohammed Arafat Nadaf — Cybersecurity Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --surface: #111418;
+    --surface2: #181c22;
+    --border: #1e2530;
+    --accent: #00e5a0;
+    --accent2: #ff4e6a;
+    --accent3: #3d8fff;
+    --text: #e8edf5;
+    --muted: #6a7585;
+    --dim: #3a4455;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* GRID LINES */
+  .grid-bg {
+    position: fixed; inset: 0;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(10,12,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%);
+    top: 50%; left: 60%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .hero-content { max-width: 900px; }
+
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-label::before {
+    content: '';
+    display: block;
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  h1 .accent-word { color: var(--accent); }
+
+  .hero-sub {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--muted);
+    font-style: italic;
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+
+  .hero-tags {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 48px;
+  }
+
+  .tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
+
+  .btn-primary {
+    padding: 14px 32px;
+    background: var(--accent);
+    color: #0a0c0f;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none; cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #00c888; transform: translateY(-2px); }
+
+  .btn-outline {
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--dim);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--text); }
+
+  /* STATS BAR */
+  .stats-bar {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  .stat-item {
+    background: var(--bg);
+    padding: 24px 32px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    padding: 80px 48px 48px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .section-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  /* ABOUT */
+  #about .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin: 0 48px 80px;
+  }
+
+  .about-block {
+    background: var(--surface);
+    padding: 48px;
+  }
+
+  .about-block p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #b0baca;
+    font-weight: 300;
+  }
+
+  .about-block p + p { margin-top: 16px; }
+
+  .education-list { list-style: none; }
+  .edu-item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .edu-item:last-child { border-bottom: none; }
+  .edu-degree {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .edu-school {
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .edu-meta { font-size: 0.65rem; color: var(--muted); }
+
+  /* EXPERIENCE */
+  #experience .exp-grid {
+    margin: 0 48px 80px;
+    display: flex; flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .exp-card {
+    background: var(--surface);
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    transition: background 0.2s;
+    cursor: default;
+  }
+  .exp-card:hover { background: var(--surface2); }
+
+  .exp-meta { }
+  .exp-date {
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .exp-company {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .exp-loc { font-size: 0.6rem; color: var(--dim); }
+
+  .exp-role {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li {
+    font-size: 0.8rem;
+    color: #8a9ab0;
+    line-height: 1.6;
+    padding: 4px 0 4px 18px;
+    position: relative;
+  }
+  .exp-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.7rem;
+  }
+
+  /* PROJECTS */
+  #projects .proj-grid {
+    margin: 0 48px 80px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .proj-card {
+    background: var(--surface);
+    padding: 40px;
+    display: flex; flex-direction: column;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .proj-card:hover { background: var(--surface2); }
+  .proj-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .proj-card:hover::before { transform: scaleX(1); }
+
+  .proj-card.accent2::before { background: var(--accent2); }
+  .proj-card.accent3::before { background: var(--accent3); }
+
+  .proj-num {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--dim);
+    margin-bottom: 32px;
+  }
+  .proj-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .proj-desc {
+    font-size: 0.75rem;
+    color: #6a7a90;
+    line-height: 1.6;
+    flex: 1;
+    margin-bottom: 24px;
+  }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .proj-tag {
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    background: var(--border);
+    color: var(--muted);
+    border-radius: 1px;
+  }
+
+  /* SKILLS */
+  #skills .skills-wrapper {
+    margin: 0 48px 80px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .skill-group {
+    background: var(--surface);
+    padding: 40px 48px;
+  }
+  .skill-group-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .skill-group-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .skill-items { display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-pill {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    color: #8a9ab0;
+    font-size: 0.7rem;
+    border-radius: 1px;
+    transition: all 0.15s;
+  }
+  .skill-pill:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,229,160,0.05); }
+
+  /* ACHIEVEMENTS */
+  #achievements .ach-grid {
+    margin: 0 48px 80px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .ach-card {
+    background: var(--surface);
+    padding: 40px;
+  }
+
+  .ach-icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .ach-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .ach-body {
+    font-size: 0.72rem;
+    color: #6a7a90;
+    line-height: 1.6;
+  }
+
+  /* CONTACT */
+  #contact {
+    border-top: 1px solid var(--border);
+    padding: 80px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .contact-left h2 { margin-bottom: 24px; }
+  .contact-left p {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 16px; }
+  .contact-link {
+    display: flex; align-items: center; gap: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    transition: color 0.2s;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .contact-link:hover { color: var(--accent); }
+  .contact-link-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer p { font-size: 0.6rem; color: var(--dim); letter-spacing: 0.1em; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-label { animation: fadeUp 0.6s ease both; }
+  h1 { animation: fadeUp 0.6s ease 0.1s both; }
+  .hero-sub { animation: fadeUp 0.6s ease 0.2s both; }
+  .hero-tags { animation: fadeUp 0.6s ease 0.3s both; }
+  .hero-cta { animation: fadeUp 0.6s ease 0.4s both; }
+
+  /* cursor blink */
+  .cursor {
+    display: inline-block;
+    width: 3px; height: 0.85em;
+    background: var(--accent);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    #hero, .section-header { padding-left: 24px; padding-right: 24px; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); padding: 16px; }
+    #about .about-grid,
+    #experience .exp-grid,
+    #skills .skills-wrapper,
+    #achievements .ach-grid { margin: 0 24px 48px; }
+    #about .about-grid,
+    #skills .skills-wrapper,
+    #achievements .ach-grid { grid-template-columns: 1fr; }
+    #projects .proj-grid { margin: 0 24px 48px; grid-template-columns: 1fr; }
+    .exp-card { grid-template-columns: 1fr; gap: 16px; padding: 28px 24px; }
+    #contact { grid-template-columns: 1fr; gap: 48px; padding: 48px 24px; }
+    footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">M.A. NADAF</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#achievements">Awards</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-label">Cybersecurity Portfolio</div>
+    <h1>Mohammed<br><span class="accent-word">Arafat</span><br>Nadaf<span class="cursor"></span></h1>
+    <p class="hero-sub">MS Cybersecurity · Northeastern University · Penetration tester, risk analyst & medical device security researcher.</p>
+    <div class="hero-tags">
+      <span class="tag">Network Security</span>
+      <span class="tag">Penetration Testing</span>
+      <span class="tag">Incident Response</span>
+      <span class="tag">OT/ICS Security</span>
+      <span class="tag">Risk Management</span>
+      <span class="tag">NIST / MITRE</span>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">9.67</span>
+    <span class="stat-label">Undergraduate CGPA / 10</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">#1</span>
+    <span class="stat-label">CTF Competition Finish</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">68<span style="font-size:1.2rem">min</span></span>
+    <span class="stat-label">All Challenges Solved</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">3+</span>
+    <span class="stat-label">Hackathon Awards</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">01 — About</div>
+      <h2>The Human<br>Behind the Terminal</h2>
+    </div>
+  </div>
+  <div class="about-grid">
+    <div class="about-block">
+      <p>I'm a graduate student in Cybersecurity at Northeastern University, Boston — trained by some of the sharpest minds in the field, including <strong style="color:var(--text)">Kevin Fu</strong> (former FDA Acting Director of Medical Device Cybersecurity) and <strong style="color:var(--text)">Kevin Amorin</strong> (former Google Engineering Manager).</p>
+      <p>My work lives at the intersection of offensive and defensive security: firmware analysis, network threat detection, critical infrastructure risk quantification, and incident response planning. I approach every problem as an adversary first and a defender second.</p>
+      <p>Outside the terminal, I compete in CTF competitions, build network analysis tools in Python, and contribute to resilience research on supply chains and national infrastructure.</p>
+    </div>
+    <div class="about-block">
+      <ul class="education-list">
+        <li class="edu-item">
+          <div class="edu-degree">Master of Science — Cybersecurity</div>
+          <div class="edu-school">Northeastern University, Boston, MA</div>
+          <div class="edu-meta">Expected May 2027 · Network Security · Medical Device Security · Risk Management · ICS/OT</div>
+        </li>
+        <li class="edu-item">
+          <div class="edu-degree">Bachelor of Technology — Computer Science & Engineering</div>
+          <div class="edu-school">Sinhgad Institute of Technology, Pune, India</div>
+          <div class="edu-meta">Graduated 2024 · CGPA 9.67/10 · Most Achieving Student Award</div>
+        </li>
+        <li class="edu-item">
+          <div class="edu-degree">Current Role</div>
+          <div class="edu-school">Proctor — Northeastern University Residential Security</div>
+          <div class="edu-meta">March 2026 – June 2026 · Security Operations · Incident Response</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">02 — Experience</div>
+      <h2>Work &<br>Research</h2>
+    </div>
+  </div>
+  <div class="exp-grid">
+
+    <div class="exp-card">
+      <div class="exp-meta">
+        <div class="exp-date">Mar 2026 – Jun 2026</div>
+        <div class="exp-company">Northeastern University</div>
+        <div class="exp-loc">Boston, MA</div>
+      </div>
+      <div>
+        <div class="exp-role">Proctor — Residential Security Office</div>
+        <ul class="exp-bullets">
+          <li>Monitor building access and enforce university security policies across residential facilities</li>
+          <li>Verify guest credentials and manage visitor sign-in/sign-out procedures</li>
+          <li>Respond to security incidents and emergencies following established incident response protocols</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="exp-card">
+      <div class="exp-meta">
+        <div class="exp-date">2022 – 2023</div>
+        <div class="exp-company">Symbiosis Professional University</div>
+        <div class="exp-loc">Pune, India</div>
+      </div>
+      <div>
+        <div class="exp-role">Research Assistant (Intern)</div>
+        <ul class="exp-bullets">
+          <li>Conducted data collection and analysis for resilience research on supply chains and community infrastructure</li>
+          <li>Synthesized large datasets into actionable insights for academic reports and stakeholder presentations</li>
+          <li>Published research in IRJMETS journal on cybersecurity and infrastructure resilience</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">03 — Projects</div>
+      <h2>Selected<br>Work</h2>
+    </div>
+  </div>
+  <div class="proj-grid">
+
+    <div class="proj-card">
+      <div class="proj-num">01</div>
+      <div class="proj-title">BD Alaris 8015 Firmware Security Analysis</div>
+      <div class="proj-desc">Comprehensive firmware security analysis of an FDA-flagged infusion pump (CVE-2016-9355). Identified 6 compound OT vulnerabilities including plaintext credential storage and disabled integrity verification. Applied STRIDE threat modeling and produced CVSS-scored findings validated against MITRE Medical Device Playbook.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">Firmware</span>
+        <span class="proj-tag">CVE Analysis</span>
+        <span class="proj-tag">STRIDE</span>
+        <span class="proj-tag">CVSS</span>
+        <span class="proj-tag">OT Security</span>
+      </div>
+    </div>
+
+    <div class="proj-card accent2">
+      <div class="proj-num">02</div>
+      <div class="proj-title">JetBlue Critical Infrastructure Risk Model</div>
+      <div class="proj-desc">Applied MBRA and Fault Tree Analysis to quantify $58.3M risk exposure across JetBlue's 14-node aviation network. Identified 2 critical nodes representing 51% of total risk. Designed $71.06M phased mitigation budget achieving 75% risk reduction. Produced NIST CSF-aligned KPI dashboards and interactive Python network graph.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">MBRA</span>
+        <span class="proj-tag">Fault Tree</span>
+        <span class="proj-tag">NIST CSF</span>
+        <span class="proj-tag">Python</span>
+        <span class="proj-tag">Risk Quant</span>
+      </div>
+    </div>
+
+    <div class="proj-card accent3">
+      <div class="proj-num">03</div>
+      <div class="proj-title">Incident Response Playbooks (SQL Injection & VPN Intrusion)</div>
+      <div class="proj-desc">Authored 2 NIST 800-61-aligned IR playbooks for a corporate CSIRT. Defined escalation workflows, containment procedures, and evidence retention. Integrated MITRE ATT&CK techniques (T1659, T1021, T1571) into detection and triage with full communication matrices.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">NIST 800-61</span>
+        <span class="proj-tag">MITRE ATT&CK</span>
+        <span class="proj-tag">CSIRT</span>
+        <span class="proj-tag">SQL Injection</span>
+        <span class="proj-tag">VPN</span>
+      </div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-num">04</div>
+      <div class="proj-title">Network Threat Detection Lab (ntopng / Snort)</div>
+      <div class="proj-desc">Deployed and configured ntopng and Snort IDS/IPS to monitor live network traffic. Detected and analyzed brute-force attacks on SSH (Port 22), HTTP probe scans, FTP anonymous login attempts, and MySQL enumeration. Generated flow analysis reports with 75,000+ flagged emergency events.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">Snort IDS</span>
+        <span class="proj-tag">ntopng</span>
+        <span class="proj-tag">Wireshark</span>
+        <span class="proj-tag">Netflow</span>
+        <span class="proj-tag">Brute Force</span>
+      </div>
+    </div>
+
+    <div class="proj-card accent2">
+      <div class="proj-num">05</div>
+      <div class="proj-title">Astound Broadband OSINT Reconnaissance</div>
+      <div class="proj-desc">Full-scope OSINT reconnaissance on Astound Broadband using passive enumeration techniques: Google dorking, Certificate Transparency (crt.sh), Amass subdomain enumeration, Shodan IoT scanning, and LinkedIn employee footprinting. Mapped 164+ exposed subdomains and proposed controls.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">OSINT</span>
+        <span class="proj-tag">Shodan</span>
+        <span class="proj-tag">Amass</span>
+        <span class="proj-tag">Google Dork</span>
+        <span class="proj-tag">Recon</span>
+      </div>
+    </div>
+
+    <div class="proj-card accent3">
+      <div class="proj-num">06</div>
+      <div class="proj-title">TLS / HTTPS Interception Lab (Burp Suite)</div>
+      <div class="proj-desc">Configured Burp Suite as a MITM proxy to intercept and analyze HTTPS traffic. Examined TLS handshake mechanics, certificate chain validation, and cookie security attributes. Demonstrated downgrade attack vectors and session token exposure in misconfigured web applications.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">Burp Suite</span>
+        <span class="proj-tag">TLS/HTTPS</span>
+        <span class="proj-tag">MITM</span>
+        <span class="proj-tag">Web Security</span>
+        <span class="proj-tag">Cookies</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">04 — Skills</div>
+      <h2>Technical<br>Arsenal</h2>
+    </div>
+  </div>
+  <div class="skills-wrapper">
+
+    <div class="skill-group">
+      <div class="skill-group-title">Offensive Security</div>
+      <div class="skill-items">
+        <span class="skill-pill">Kali Linux</span>
+        <span class="skill-pill">Metasploit</span>
+        <span class="skill-pill">Burp Suite</span>
+        <span class="skill-pill">Nmap</span>
+        <span class="skill-pill">Buffer Overflow</span>
+        <span class="skill-pill">SQL Injection</span>
+        <span class="skill-pill">XSS</span>
+        <span class="skill-pill">OSINT</span>
+        <span class="skill-pill">Shodan</span>
+        <span class="skill-pill">WEP/WPA2 Cracking</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">Defensive / Monitoring</div>
+      <div class="skill-items">
+        <span class="skill-pill">Wireshark</span>
+        <span class="skill-pill">Snort IDS/IPS</span>
+        <span class="skill-pill">ntopng</span>
+        <span class="skill-pill">Zeek</span>
+        <span class="skill-pill">SOC Operations</span>
+        <span class="skill-pill">SIEM</span>
+        <span class="skill-pill">Incident Response</span>
+        <span class="skill-pill">Firewall Rules</span>
+        <span class="skill-pill">Netflow Analysis</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">Frameworks & Standards</div>
+      <div class="skill-items">
+        <span class="skill-pill">NIST CSF</span>
+        <span class="skill-pill">NIST 800-61</span>
+        <span class="skill-pill">MITRE ATT&CK</span>
+        <span class="skill-pill">MITRE ATT&CK for ICS</span>
+        <span class="skill-pill">STRIDE</span>
+        <span class="skill-pill">CVSS</span>
+        <span class="skill-pill">IEC 62443</span>
+        <span class="skill-pill">ISO 27001</span>
+        <span class="skill-pill">NICE Framework</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">Programming & Tools</div>
+      <div class="skill-items">
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">Bash</span>
+        <span class="skill-pill">Java</span>
+        <span class="skill-pill">SQL</span>
+        <span class="skill-pill">C / C++</span>
+        <span class="skill-pill">Spring Boot</span>
+        <span class="skill-pill">AWS EC2/VPC</span>
+        <span class="skill-pill">NetworkX</span>
+        <span class="skill-pill">Git</span>
+        <span class="skill-pill">Excel / MBRA</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">05 — Achievements</div>
+      <h2>Awards &<br>Certifications</h2>
+    </div>
+  </div>
+  <div class="ach-grid">
+
+    <div class="ach-card">
+      <span class="ach-icon">🏆</span>
+      <div class="ach-title">1st Place — CTF Competition</div>
+      <div class="ach-body">Solved ALL challenges in 68 minutes. 175 points. Northeastern / Viceroy Decree, November 2025. Domains: cryptography, pwn (buffer overflow, SUID), web exploitation, wireless security.</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">🥇</span>
+      <div class="ach-title">1st Place — RIT Sangli Hackathon 2023</div>
+      <div class="ach-body">First place finish at regional hackathon, Rajarambapu Institute of Technology, 2023.</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">🥈</span>
+      <div class="ach-title">Runner-Up — Intelliswift i-Innovate 2023</div>
+      <div class="ach-body">Runner-up at Intelliswift i-Innovate Hackathon 2023, competing on innovative technology solutions.</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">🎓</span>
+      <div class="ach-title">Most Achieving Student Award</div>
+      <div class="ach-body">Recognized as most achieving student at Sinhgad Institute of Technology upon graduation with a CGPA of 9.67/10 in Computer Science & Engineering.</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">📜</span>
+      <div class="ach-title">Full Stack Java Certification (2024)</div>
+      <div class="ach-body">Certified in full stack Java development including Spring Boot, MySQL, and RBAC implementation across production-grade web applications.</div>
+    </div>
+
+    <div class="ach-card">
+      <span class="ach-icon">🚑</span>
+      <div class="ach-title">CPR Certified — NUPD</div>
+      <div class="ach-body">CPR certification through Northeastern University Police Department. Reinforces commitment to both digital and physical safety in security operations roles.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-left">
+    <div class="section-eyebrow" style="margin-bottom:24px">06 — Contact</div>
+    <h2>Let's<br>Connect</h2>
+    <p>Open to cybersecurity internships, co-ops, research collaborations, and full-time roles starting 2027 in Security Engineering, Penetration Testing, SOC, or OT/ICS security.</p>
+    <a href="mailto:nadafmdarafat@gmail.com" class="btn-primary">Send an Email</a>
+  </div>
+  <div class="contact-links">
+    <a href="mailto:nadafmdarafat@gmail.com" class="contact-link">
+      <div>
+        <span class="contact-link-label">Email</span>
+        nadafmdarafat@gmail.com
+      </div>
+    </a>
+    <a href="tel:+16175169242" class="contact-link">
+      <div>
+        <span class="contact-link-label">Phone</span>
+        +1 (617) 516-9242
+      </div>
+    </a>
+    <a href="https://linkedin.com/in/mdarafatnadaf" target="_blank" class="contact-link">
+      <div>
+        <span class="contact-link-label">LinkedIn</span>
+        linkedin.com/in/mdarafatnadaf
+      </div>
+    </a>
+    <a href="https://github.com/nadafarafat" target="_blank" class="contact-link">
+      <div>
+        <span class="contact-link-label">GitHub</span>
+        github.com/nadafarafat
+      </div>
+    </a>
+    <a href="#" class="contact-link">
+      <div>
+        <span class="contact-link-label">Location</span>
+        Boston, MA — Northeastern University
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Mohammed Arafat Nadaf</p>
+  <p>MS Cybersecurity · Northeastern University · Boston, MA</p>
+</footer>
+
+</body>
+</html>
